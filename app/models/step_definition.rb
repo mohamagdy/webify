@@ -7,7 +7,8 @@ class StepDefinition
 		/the "(.*?)" table has a field named "(.*?)" with type "(.*?)"$/ => :add_column,
 		/I have an authentication page$/ => :add_devise,
 		/I have a registration page$/ => :add_devise,
-		/I have the following pages/ => :add_pages
+		/I have the following pages/ => :add_pages,
+		/I have a main menu with the following links/ => :add_menu_items
 	}
 
 	PROJECTS_PATH = "../webify_projects"
@@ -97,11 +98,20 @@ class StepDefinition
 			page_names = step.scan(/"([^"]*)"/).flatten
 
 			page_names.each do |page|
-				system("BUNDLE_GEMFILE=Gemfile bundle exec rails g scaffold_controller #{page}")
+				system("BUNDLE_GEMFILE=Gemfile bundle exec rails g scaffold_controller #{page.downcase.underscore}")
 			end
 
 			# Commiting changes
 			self.commit("Adding #{page_names.join(' ')} pages", project_name)
+		end
+	end
+
+	def self.add_menu_items(regex, step, project_name)
+		Dir.chdir("#{PROJECTS_PATH}/#{project_name}") do
+			page_names = step.scan(/"([^"]*)"/).flatten
+
+			# Commiting changes
+			self.commit("Adding #{page_names.join(' ')} menu items", project_name)
 		end
 	end
 
