@@ -6,14 +6,16 @@ Feature: I want to build a basic website
 		And I use "faltly" as a theme 
 
 	Scenario: Database
-		Given I have a "contacts" table 
+		And I have a "contacts" table 
 		And the "contacts" table has a field named "name" with type "string"
 		And the "contacts" table has a field named "subject" with type "string"
 		And the "contacts" table has a field named "message" with type "string"
 
 	Scenario: Authentication
-		Given I have a login page with "Username/email", "Password" text fields
-		And I have a login button
+		Given I have an authentication page
+
+	Scenario: Registeration
+		Given I have a registration page
 
 	Scenario: Pages
 		Given I have the following pages "Home", "About Us", "Contact Us"

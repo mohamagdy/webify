@@ -4,7 +4,9 @@ class StepDefinition
 		/I have a website named "(.*?)"$/ => :initialize_project,
 		/I use "(.*?)" as a styling framework$/ => :add_twitter_bootstrap,
 		/I have a "(.*?)" table$/ => :add_model,
-		/the "(.*?)" table has a field named "(.*?)" with type "(.*?)"$/ => :add_column
+		/the "(.*?)" table has a field named "(.*?)" with type "(.*?)"$/ => :add_column,
+		/I have an authentication page/ => :add_devise,
+		/I have a registration page/ => :add_devise
 	}
 
 	PROJECTS_PATH = "../webify_projects"
@@ -74,11 +76,30 @@ class StepDefinition
 		end
 	end
 
+	def self.add_devise(regex, step, project_name)
+		step =~ regex
+
+		Dir.chdir("#{PROJECTS_PATH}/#{project_name}") do	
+			self.append_gem("devise", project_name)
+		
+			# # Generating the Devise files
+			system("BUNDLE_GEMFILE=Gemfile bundle exec rails generate devise:install -f")
+			system("BUNDLE_GEMFILE=Gemfile bundle exec rails generate devise user")
+
+			# # Commiting changes
+			self.commit("Adding Devise files", project_name)
+		end		
+	end
+
 	def self.append_gem(gem_name, project_name)		
+		return if Gem::Specification::find_all_by_name(gem_name).any?
+
 		File.open("Gemfile", "a") { |file| file.puts "gem '#{gem_name}'" }
 
 		# Installing the gem
-		system("BUNDLE_GEMFILE=Gemfile bundle install")
+		Bundler.with_clean_env do
+			system("BUNDLE_GEMFILE=Gemfile bundle install")
+		end
 	end
 
 	def self.commit(message, project_name)
