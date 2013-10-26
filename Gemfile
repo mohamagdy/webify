@@ -9,7 +9,12 @@ gem 'pg'
 
 # The Gherkin gem for parsing scenarios 
 gem 'gherkin'
+
+# OpenStruct recursive
 gem 'recursive-open-struct'
+
+# Git
+gem 'git'
 
 # Gems used only for assets and not required
 # in production environments by default.
