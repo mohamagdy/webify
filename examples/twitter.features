@@ -1,0 +1,22 @@
+Feature: I want to build Twitter
+  
+	Scenario: Site interface
+		Given I have a website 
+		And I use "Twitter Bootstrap" as a styling framework
+		And I use "faltly" as a theme 
+
+	Scenario: Database
+		Given I have a "tweets" table with fields "tweet" with type string
+
+	Scenario: Pages
+		Given I have the following pages "Home"
+
+	Scenario: Main Menu
+		Given I have a main menu with the following links "Home"
+
+	Scenario: Home page
+		Given I am on the "Home" page
+		Then I should see a page with "Tweet" text fields
+		And I should see a button with text "Tweet"
+
+

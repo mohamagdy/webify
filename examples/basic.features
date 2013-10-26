@@ -1,0 +1,36 @@
+Feature: I want to build a basic website
+  
+	Scenario: Site interface
+		Given I have a website 
+		And I use "Twitter Bootstrap" as a styling framework
+		And I use "faltly" as a theme 
+
+	Scenario: Database
+		Given I have a "contacts" table with fields "name", "subject" with type "string"
+		And I have a "contacts" table with fields "message" with type "text"
+
+	Scenario: Authentication
+		Given I have a login page with "Username/email", "Password" text fields
+		And I have a login button
+
+	Scenario: Pages
+		Given I have the following pages "Home", "About Us", "Contact Us"
+
+	Scenario: Main Menu
+		Given I have a main menu with the following links "Home", "About Us", "Contact Us"
+
+	Scenario: About us page
+		Given I am on the "About Us" page
+		Then I should see the following text "This is the Basic website home page" within "h1"
+
+	Scenario: About us page
+		Given I am on the "About Us" page
+		Then I should see the following text "This is about us page" within "p"
+
+	Scenario: Contact us page
+		Given I am on the "Contact Us" page
+		Then I should see a page with "Name", "Subject" text fields
+		And I should see a page with "Message" text area
+		And a submit button
+
+
