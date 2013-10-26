@@ -101,7 +101,7 @@ class StepDefinition
 			end
 
 			# Commiting changes
-			self.commit("Adding column #{$2} to model #{$1}", project_name)
+			self.commit("Adding #{page_names.join(' ')} pages", project_name)
 		end
 	end
 
