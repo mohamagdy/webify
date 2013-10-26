@@ -6,8 +6,10 @@ Feature: I want to build a basic website
 		And I use "faltly" as a theme 
 
 	Scenario: Database
-		Given I have a "contacts" table with fields "name", "subject" with type "string"
-		And I have a "contacts" table with fields "message" with type "text"
+		Given I have a "contacts" table 
+		And the "contacts" table has a field named "name" with type "string"
+		And the "contacts" table has a field named "subject" with type "string"
+		And the "contacts" table has a field named "message" with type "string"
 
 	Scenario: Authentication
 		Given I have a login page with "Username/email", "Password" text fields
