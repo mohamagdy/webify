@@ -1,3 +1,2 @@
 class Step < WebifyModel
-
 end
