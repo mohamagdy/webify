@@ -1,2 +1,13 @@
-<h1>Home#index</h1>
-<p>Find me in app/views/home/index.html.erb</p>
+<div class="well">
+	<h1>
+		Webify converts text to a website
+	</h1>
+
+	<div class="clearfix"></div>
+
+	<%= form_tag uploads_path, multipart: true do %>
+		<%= file_field_tag :file, title: "Choose your features file" %>
+	<% end %>
+
+	<div class="clearfix"></div>
+</div>

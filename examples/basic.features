@@ -3,7 +3,6 @@ Feature: I want to build a basic website
 	Scenario: Site interface
 		Given I have a website named "Basic"
 		And I use "Twitter Bootstrap" as a styling framework
-		And I use "faltly" as a theme 
 
 	Scenario: Database
 		And I have a "contacts" table 

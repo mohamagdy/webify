@@ -26,6 +26,8 @@ class StepDefinition
 	def self.method_for(step, project_name)
 		matching_regex = MATCHERS.keys.find { |keys| keys =~ step }
 
+		p "#{step} => #{matching_regex}", "================"
+
     self.send(MATCHERS[matching_regex], matching_regex, step, project_name)
 	end
 
@@ -50,6 +52,7 @@ class StepDefinition
 	end
 
 	def self.add_twitter_bootstrap(regex, step, project_name)
+		p "HEREREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"
 		Dir.chdir("#{PROJECTS_PATH}/#{project_name}") do
 			self.append_gem("twitter-bootstrap-rails", project_name)
 			
@@ -185,7 +188,7 @@ class StepDefinition
 	end
 
 	def self.append_gem(gem_name, project_name)		
-		return if Gem::Specification::find_all_by_name(gem_name).any?
+		p "Appending #{gem_name}"
 
 		File.open("Gemfile", "a") { |file| file.puts "gem '#{gem_name}'" }
 

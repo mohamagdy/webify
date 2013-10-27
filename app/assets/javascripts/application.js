@@ -14,3 +14,12 @@
 //= require jquery_ujs
 //= require twitter/bootstrap
 //= require_tree .
+
+
+$(function() {
+	$('input[type=file]').bootstrapFileInput();
+
+	$('input[type=file]').change(function() { 
+	    $('form').submit(); 
+	});
+});
