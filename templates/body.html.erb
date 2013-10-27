@@ -1,0 +1,19 @@
+<body>
+
+  <%%= render "layouts/menu" if File.exists?("#{Rails.root}/app/views/layouts/_menu.html.erb") %>
+
+  <div class="container-fluid">
+    <div class="row-fluid">
+      <div class="span12">
+        <%%= bootstrap_flash %>
+        <%%= yield %>
+      </div>
+    </div><!--/row-->
+
+    <footer>
+      <p>&copy; <%= Date.today.year %></p>
+    </footer>
+
+  </div> <!-- /container -->
+
+</body>

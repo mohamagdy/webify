@@ -23,13 +23,11 @@ Feature: I want to build a basic website
 	Scenario: Main Menu
 		Given I have a main menu with the following links "Home", "About Us", "Contact Us"
 
-	Scenario: About us page
-		Given I am on the "About Us" page
-		Then I should see the following text "This is the Basic website home page" within "h1"
+	Scenario: Home page
+		Given I am on "Home" page I should see the following text "This is the Basic website home page" within "h1"
 
 	Scenario: About us page
-		Given I am on the "About Us" page
-		Then I should see the following text "This is about us page" within "p"
+		Given I am on "Home" page I should see the following text "This is about us page" within "p"
 
 	Scenario: Contact us page
 		Given I am on the "Contact Us" page

@@ -8,7 +8,8 @@ class StepDefinition
 		/I have an authentication page$/ => :add_devise,
 		/I have a registration page$/ => :add_devise,
 		/I have the following pages/ => :add_pages,
-		/I have a main menu with the following links/ => :add_menu_items
+		/I have a main menu with the following links/ => :add_menu_items,
+		/I am on "(.*?)" page I should see the following text "(.*?)" within "(.*?)"/ => :add_html_element
 	}
 
 	PROJECTS_PATH = "../webify_projects"
@@ -35,9 +36,12 @@ class StepDefinition
 			step =~ regex
 			`rails new #{$1.downcase.underscore}`
 		end
-
-		# Initialize Git repo and commit 
+ 
 		Dir.chdir("../webify_projects/#{project_name}") do
+			# Deleting the index.html file root file
+			File.delete("public/index.html")
+
+			# Initialize Git repo and commit
 			git = Git.init
 			git.add
 			git.commit("Initial commit")
@@ -130,6 +134,31 @@ class StepDefinition
 			# Commiting changes
 			self.commit("Adding #{link_titles.join(' ')} menu items", project_name)
 		end
+	end
+
+	def self.add_html_element(regex, step, project_name)
+		step =~ regex
+
+		Dir.chdir("#{PROJECTS_PATH}/#{project_name}") do
+			namespace = OpenStruct.new(field_text: $2, field_name: $3)
+			template = ERB.new(IO.read("#{Rails.root}/templates/pages.html.erb"))
+
+			File.open("app/views/#{$1.downcase.underscore}/index.html.erb", "w+") do |file|
+				file.write(template.result(namespace.instance_eval { binding }))
+			end
+
+			p $1.downcase, "asdasd"
+
+			if $1.downcase == "home"
+				routes_file = File.read("config/routes.rb")
+				routes_file.gsub!("# root :to => 'welcome#index'", "root to: 'home#index'")
+				File.open("config/routes.rb", "w+") { |file| file.write routes_file }
+			end
+
+			# Commiting changes
+			self.commit("Adding html element to page #{$1}", project_name)
+		end
+
 	end
 
 	def self.append_gem(gem_name, project_name)		
