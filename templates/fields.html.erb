@@ -1,0 +1,6 @@
+<%%= form_for @<%= object %> do |f| %>
+	<% field_names.each do |field_name| %>
+		<%%= f.label :<%= field_name %> %>
+		<%%= f.text_field :<%= field_name %> %>
+	<% end %>
+<%% end %>

@@ -9,7 +9,8 @@ class StepDefinition
 		/I have a registration page$/ => :add_devise,
 		/I have the following pages/ => :add_pages,
 		/I have a main menu with the following links/ => :add_menu_items,
-		/I am on "(.*?)" page I should see the following text "(.*?)" within "(.*?)"/ => :add_html_element
+		/I am on "(.*?)" page I should see the following text "(.*?)" within "(.*?)"/ => :add_html_element,
+		/I am on the "(.*?)" page I should see a form with the fields/ => :add_html_fields
 	}
 
 	PROJECTS_PATH = "../webify_projects"
@@ -34,7 +35,7 @@ class StepDefinition
 	def self.initialize_project(regex, step, project_name)
 		Dir.chdir(PROJECTS_PATH) do
 			step =~ regex
-			`rails new #{$1.downcase.underscore}`
+			`rails new #{$1.downcase.parameterize.underscore}`
 		end
  
 		Dir.chdir("../webify_projects/#{project_name}") do
@@ -112,7 +113,7 @@ class StepDefinition
 			page_names = step.scan(/"([^"]*)"/).flatten
 
 			page_names.each do |page|
-				system("BUNDLE_GEMFILE=Gemfile bundle exec rails g controller #{page.downcase.underscore} index")
+				system("BUNDLE_GEMFILE=Gemfile bundle exec rails g controller #{page.downcase.parameterize.underscore} index")
 			end
 
 			# Commiting changes
@@ -143,11 +144,9 @@ class StepDefinition
 			namespace = OpenStruct.new(field_text: $2, field_name: $3)
 			template = ERB.new(IO.read("#{Rails.root}/templates/pages.html.erb"))
 
-			File.open("app/views/#{$1.downcase.underscore}/index.html.erb", "w+") do |file|
+			File.open("app/views/#{$1.downcase.parameterize.underscore}/index.html.erb", "w+") do |file|
 				file.write(template.result(namespace.instance_eval { binding }))
 			end
-
-			p $1.downcase, "asdasd"
 
 			if $1.downcase == "home"
 				routes_file = File.read("config/routes.rb")
@@ -158,7 +157,31 @@ class StepDefinition
 			# Commiting changes
 			self.commit("Adding html element to page #{$1}", project_name)
 		end
+	end
 
+	def self.add_html_fields(regex, step, project_name)
+		Dir.chdir("#{PROJECTS_PATH}/#{project_name}") do
+			params = step.scan(/"([^"]*)"/).flatten
+			params = params.map { |param| param.downcase.parameterize.underscore }
+			
+			file_name = params.first
+
+			namespace = OpenStruct.new(object: params.first, field_names: params[1..-1])
+			template = ERB.new(IO.read("#{Rails.root}/templates/fields.html.erb"))
+
+			File.open("app/views/#{file_name}/_form.html.erb", "w+") do |file|
+				file.write(template.result(namespace.instance_eval { binding }))
+			end
+
+			unless File.exists?("app/views/#{file_name}/new.html.erb")
+				File.open("app/views/#{file_name}/new.html.erb", "w+") do |file|
+					file.write("render 'form'")
+				end
+			end
+
+			# Commiting changes
+			self.commit("Adding html field to page #{$1}", project_name)
+		end
 	end
 
 	def self.append_gem(gem_name, project_name)		
