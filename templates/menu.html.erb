@@ -10,7 +10,7 @@
       <div class="nav-collapse">
         <ul class="nav">
           <% link_titles.each do |link_title| %>
-            <li><%%= link_to "<%= link_title %>", "#" %></li>
+            <li><%%= link_to "<%= link_title %>", <%= "#{link_title.downcase.parameterize.underscore}_path" %> %></li>
           <% end %>
         </ul>
       </div>
